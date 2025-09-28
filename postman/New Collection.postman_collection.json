@@ -1,0 +1,56 @@
+{
+	"info": {
+		"_postman_id": "8c9faa81-876b-4f1f-a608-26c3b25ec08f",
+		"name": "New Collection",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10142921"
+	},
+	"item": [
+		{
+			"name": "CREATE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"type\":\"CAS\",\n    \"value\":13.35\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8001/pay",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"pay"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET ID",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8001/pay/4",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"pay",
+						"4"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
