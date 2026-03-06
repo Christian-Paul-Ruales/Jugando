@@ -1,9 +1,9 @@
 services:
-  app:
+  app-with-graal:
     build:
       context: .
-      dockerfile: Dockerfile
-    container_name: spring-boot-app
+      dockerfile: DockerfileGraalvm
+    container_name: spring-boot-graalvm
     ports:
       - "8001:8001"
     environment:

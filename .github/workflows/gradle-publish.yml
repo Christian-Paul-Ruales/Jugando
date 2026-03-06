@@ -4,7 +4,7 @@ name: Build & Publish
 on:
   push:
     branches: [main]
-  release: # corre también cuando creas release
+  release:
     types: [ created ]
   workflow_dispatch:
 

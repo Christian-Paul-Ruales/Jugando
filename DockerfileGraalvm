@@ -1,0 +1,49 @@
+# Usar imagen oficial de GraalVM con Gradle incluido
+FROM gradle:7.6-jdk21 AS builder
+
+WORKDIR /workspace
+
+COPY build.gradle .
+COPY settings.gradle .
+COPY src src
+COPY gradle gradle
+
+# Construir la aplicación primero
+RUN gradle build -x test --no-daemon
+
+# Stage 2: Native image con GraalVM
+FROM ghcr.io/graalvm/native-image-community:21-ol9 AS native-builder
+
+WORKDIR /workspace
+
+# Copiar el JAR construido
+COPY --from=builder /workspace/build/libs/*.jar app.jar
+
+# Crear native image directamente desde el JAR
+RUN native-image -jar app.jar \
+    --no-fallback \
+    -H:Name=application \
+    --enable-https \
+    --enable-http \
+    --verbose \
+    -H:+ReportExceptionStackTraces
+
+# Stage 3: Runtime
+FROM ubuntu:22.04
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+RUN groupadd -r appuser && useradd -r -g appuser appuser
+
+WORKDIR /app
+
+COPY --from=native-builder --chown=appuser:appuser /workspace/application /app/application
+
+USER appuser
+
+EXPOSE 8080
+
+ENTRYPOINT ["/app/application"]
